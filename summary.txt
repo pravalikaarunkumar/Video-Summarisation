@@ -1,0 +1,5 @@
+Tokenization is essential for enabling downstream natural language processing (NLP) tasks, such as sentiment analysis and machine translation, as it breaks down complex text into manageable pieces.
+Stopword removal is the process of filtering out common words that do not carry substantial meaning, such as “the,” “is,” and “and.” Removing these stopwords reduces the dimensionality of the dataset, which can enhance the performance of NLP models by focusing on more meaningful words.Unlike stemming, which often chops off word endings indiscriminately, lemmatization considers the context and part of speech of a word.
+It helps NLP systems comprehend the role of each word in a sentence, leading to better analysis and generation of text.
+Named Entity Recognition (NER) is a technique used to identify and categorize entities in text, such as names, locations, dates, and organizations.
+POS tagging is crucial for understanding syntactic structures and is applied in tasks like parsing and machine translation.

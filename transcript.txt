@@ -1,0 +1,365 @@
+0.0 --> 23.44:  Hello everyone, welcome back to the final lecture of the first week. So, in the last
+23.44 --> 27.88:  lecture we were discussing about various empirical laws, so in particular Gips law and Heap's
+27.88 --> 34.0:  law that how the words in the vocabulary are distributed in a corpus. And we saw that the
+34.0 --> 39.68:  distribution is not very uniform, there are certain words that are very very common, so
+39.68 --> 45.84:  we saw that roughly 100 words in the vocabulary make for 50 percent of the corpus, by that
+45.84 --> 50.84:  I mean that number of tokens. And on the other hand there are 50 percent of the words in
+50.84 --> 55.480000000000004:  the vocabulary that occur only once. And we discussed what are the various relationships
+55.48 --> 64.03999999999999:  among the vocabulary size and the number of tokens that I observe in a corpus. And also
+64.03999999999999 --> 69.56:  how they grow with respect to each other and Gips law gives gave me a relation between
+69.56 --> 76.52:  the frequency and the rank of a word. So, today in this lecture we will start with
+76.52 --> 83.64:  the basic pre-processing in language. So, we will cover the basic concepts and what
+83.68 --> 88.4:  are the challenges that one might face while doing the processing. So, we are going to
+88.4 --> 93.4:  the basics of text processing.
+93.4 --> 104.4:  So, we will start with the problem of tokenization as the name would suggest, remember the name
+104.4 --> 110.68:  token, token is an individual word in my corpus. So, now what happens when I am pre-processing
+110.68 --> 118.0:  the text in given in any language, what I will face is a string of characters, the sequence
+118.0 --> 124.24000000000001:  of characters. Now, I need to identify what are all the different words that are there
+124.24000000000001 --> 129.4:  in this in this sequence. So, now tokenization is the process by which I convert this string
+129.4 --> 134.28:  of characters into sequence of various words. So, I am trying to segment it by the various
+134.28 --> 141.28:  words that I am observing. So, now before going into what is tokenization,
+141.28 --> 149.0:  I will just talk about a slightly related problem sentence segmentation. So, this you
+149.0 --> 155.24:  may or may not have to do always and it depends on what is your application. So, for example,
+155.24 --> 160.2:  suppose you are doing classification for the whole document into certain classes, you might
+160.51999999999998 --> 164.83999999999997:  not have to go to the individual sentence and you can just talk about what are various
+164.83999999999997 --> 169.39999999999998:  words that are present in this document. On the other hand, suppose you are trying to
+169.39999999999998 --> 173.88:  find out what are the important sentences in this document, in that application you
+173.88 --> 179.23999999999998:  will have to go to the individual sentence. So, now if you have to go to the individual
+179.23999999999998 --> 184.88:  sentence, the first task that you will face is how do I segment this whole document into
+184.88 --> 189.64:  a sequence of sentences. So, this is sentence 1, sentence 2 and so on.
+189.76 --> 194.76:  This task is called sentence segmentation. So, now you might feel that this is very trivial
+194.76 --> 201.76:  task, but let us see is it trivial. So, what is sentence segmentation? So, problem of deciding
+204.88 --> 210.92:  where my sentence begins and ends, so that I have a complete unit of words that I call
+210.92 --> 215.64:  as a sentence. Now, do you think there might be certain challenges involved? Suppose I
+215.64 --> 221.32:  am talking about the language English, can I always say that wherever I have a dot it
+221.32 --> 228.32:  is the end of the sentence, let us see. So, there are many ways in which I can end my
+228.32 --> 235.32:  sentence. So, I can have exclamation or question mark that ends the sentence and they are mostly
+236.04 --> 240.07999999999998:  unambiguous. So, whenever I have a exclamation or question mark, I can say probably this
+240.08 --> 246.36:  is the end of the sentence, but is the case the same with a dot. So, can you think of
+246.36 --> 252.32000000000002:  a scenario where I have a dot in English and but it is not the end of sentence. So, you
+252.32000000000002 --> 259.32:  can find all sorts of abbreviations, they end with a period, doctor, mister, MPH. So,
+262.6 --> 268.0:  you have three dots here. So, you cannot call each of this as the end of your sentence.
+268.0 --> 275.0:  So, again you have numbers 2.4, 4.3 and so on. So, that means the problem of deciding
+276.24 --> 281.32:  whether a particular dot is the end of the sentence or not is not entirely trivial. So,
+281.32 --> 288.32:  I need to build certain algorithm for finding out is it my end of the sentence. So, in text
+289.52 --> 296.52:  processing if we face this kind of problem in nearly every simple task that we are doing.
+296.91999999999996 --> 302.68:  So, even if it looks at trivial task, we face with this problem that can I always call dot
+302.68 --> 308.96:  as the end of the sentence. So, how do we go about solving this? Now, if you think about
+308.96 --> 315.96:  it whenever I see a dot or question mark or exclamation, I always have to decide one of
+316.56 --> 322.35999999999996:  the two things is it the end of the sentence or is it not the end of the sentence. So,
+322.36 --> 327.76:  any data point that I am seeing I have to divide into one of these two classes. So,
+327.76 --> 332.76:  if you think of these two classes end of the sentence or not end of the sentence. So, each
+332.76 --> 337.2:  point you have to divide into one of the two classes and this in general this problem in
+337.2 --> 341.28000000000003:  general is called classification problem. So, you are classifying into one of the two
+341.28000000000003 --> 348.28000000000003:  classes. Now, so the idea is very simple. So, you have two classes and each data point
+349.28 --> 353.32:  you have to divide into one of the two classes. So, that means you have to build some sort
+353.32 --> 360.32:  of rule or algorithm for doing that. So, in this case I have to build a binary classifier.
+360.32 --> 364.0:  What do I mean by a binary classifier? There are two classes end of the sentence or not
+364.0 --> 370.08:  end of the sentence. In general, there can be multiple classes. So, now for each dot
+370.08 --> 374.47999999999996:  or in general for every word I need to decide whether this is the end of the sentence or
+374.48 --> 381.48:  not the end of the sentence. So, in general my classifiers that I will build can be some
+383.20000000000005 --> 388.96000000000004:  rules that I write by hand, some simple if then else rules or it can be some expressions.
+388.96000000000004 --> 394.12:  I say if my particular example matches with this expression it is one class, if it does
+394.12 --> 400.40000000000003:  not match it is another class or I can build a machine learning classifier. So, in this
+400.4 --> 405.79999999999995:  particular scenario what can be the simplest thing to do? Let us see can we build a simple
+405.79999999999995 --> 412.79999999999995:  rule based classifier. So, we will start with the example of a simple decision tree. So,
+413.79999999999995 --> 420.2:  by decision tree I mean a set of if then else statements. So, I am at a particular word
+420.2 --> 427.2:  I want to decide whether this is the end of the sentence or not.
+427.2 --> 434.2:  So, I can have this simple if then else kind of decision tree here. So, I am at a word
+437.59999999999997 --> 442.48:  and the first thing I check is are there lots of blank lines after me. So, this would happen
+442.48 --> 447.2:  in a text whenever this is the end of the a paragraph and there are some blank lines.
+447.2 --> 452.56:  So, if I feel that there are a lot of blank lines after me that means after this word
+452.56 --> 456.68:  I may say this might be the end of the sentence with a good confidence. So, that is why the
+456.68 --> 461.6:  branch here says yes this is the end of the sentence, but suppose there are not a lot
+461.6 --> 468.6:  of blank lines then I will check if the final punctuation is equation mark or exclamation
+468.72 --> 474.12:  or a colon in that case. So, they are quite unambiguous I will say this is the end of
+474.12 --> 479.08:  the sentence. Now, suppose it is not then I will check if the final punctuation is a
+479.08 --> 483.36:  period. So, if it is a period if it is not a period
+483.36 --> 487.92:  then it is easy to say that this is not the end of the sentence, but suppose this is a
+487.92 --> 492.88:  period. So, again I cannot say for certain if it is the end of the sentence. So, I will
+492.88 --> 498.96000000000004:  again check for simplicity I might have a list of abbreviations and I can check if the
+498.96000000000004 --> 504.76:  word that I am correctly phasing is one of the abbreviations in my list. If it is there
+504.76 --> 511.76:  I will say this is not end of the sentence if it is. So, here I am etcetera or any other
+511.76 --> 515.76:  abbreviation if the answer is yes I am not end of the sentence if the answer is no that
+515.76 --> 519.2:  means this word is not an abbreviation and this will be the end of the sentence.
+519.2 --> 525.96:  So, this is very very simple if then else rules this may not be correct, but this is
+525.96 --> 532.04:  one particular way in which this problem can be solved. In general you might want to use
+532.04 --> 537.86:  some other sort of indications we call them as various features they are various observations
+537.86 --> 547.0:  that you make from your corpus. So, what are some examples? So, suppose I see the word
+547.0 --> 554.14:  that is ending with dot can I use this as a feature whether my word starts with an upper
+554.14 --> 563.5:  case lower case all caps or is it a number how will that help.
+564.3 --> 575.68:  So, let us see I have here I am here and my word is 4.3. So, I am at dot I want to find
+575.68 --> 580.88:  out if it is the end of the sentence if I can say that the previous the current word
+580.88 --> 586.16:  is a number it is a high probability that this will be in number and it will not be
+586.16 --> 591.96:  the end of the sentence. So, this can be used as another feature. So, again by feature you
+591.96 --> 603.22:  can think of a simple rule whether the word I am currently at is a number or I can use
+603.22 --> 608.1800000000001:  the fact where the case of the word with dot is upper case or lower case. So, what happens
+608.1800000000001 --> 615.8000000000001:  generally in abbreviations they are mostly in upper case. So, suppose I have doctor and
+615.8000000000001 --> 621.82:  it starts with an upper case I can say that this might be an abbreviation same with lower
+621.84 --> 628.0400000000001:  case lower case will give me more probability that this is not an abbreviation. Similarly,
+628.0400000000001 --> 636.88:  I can also use the case of the word after dot. So, is it upper case lower case capital
+636.88 --> 642.12:  or number. So, how will that help. So, again whenever I have the end of the sentence the
+642.12 --> 648.8800000000001:  next word in general starts with a capital. So, again this can be used what can be some
+648.88 --> 654.7:  other features. So, I can have some numerical features. So, that is I will have certain
+654.7 --> 660.18:  thresholds what is the length of the word ending with dot is it if the length is small
+660.18 --> 667.22:  it might be an abbreviation if the length is larger it might not be an abbreviation.
+667.22 --> 671.82:  And I can also use probably the what is the probability that the word that is ending with
+671.82 --> 677.86:  dot occurs at the end of the sentence. So, if it is really the end of the sentence it
+677.88 --> 684.04:  might happen that in a large corpus this end sentence quite often same thing I can do with
+684.04 --> 688.12:  the next word after dot is it the start of the sentence what is the probability that
+688.12 --> 695.6:  it occurs in the start of the sentence in a large corpus. So, you might be able to use
+695.6 --> 702.6:  any of these features to decide given a particular word is it the end of the sentence or not.
+703.34 --> 709.3000000000001:  So, now suppose I ask you this question do you have the same problem in other languages
+709.3000000000001 --> 714.98:  like Hindi. So, in Hindi you will see that in general there is only a danda that you
+714.98 --> 719.4200000000001:  use to indicate the end of the sentence and this is not used for any other purpose. So,
+719.4200000000001 --> 724.78:  this problem you will see is again language dependent this problem is there for English,
+724.78 --> 728.6600000000001:  but not so for Hindi, but we will see there are other problems that do not exist for English
+728.7199999999999 --> 733.7199999999999:  language, but are there for other Indian languages. We will see some of the examples in the same
+733.7199999999999 --> 736.7199999999999:  lecture.
+736.7199999999999 --> 743.7199999999999:  Now, so how do we implement it recently. So, as you have seen this is simple if then else
+745.1999999999999 --> 752.1999999999999:  statement. So, now what is important is that you choose the correct set of features. So,
+752.76 --> 757.56:  how do you go about choosing the set of features you will see in your from your data what are
+757.5799999999999 --> 764.5799999999999:  some observations that can separate my two classes here. So, my two classes here are
+764.5799999999999 --> 770.06:  end of the sentence and the end of the sentence and what are the observations we were having
+770.06 --> 777.06:  in general it might be an abbreviation the case of the word and that is before the dot
+777.8599999999999 --> 782.38:  may be upper case or lower case and one of these might indicate one class other might
+782.38 --> 789.38:  indicate other class. So, all these are my observations that I use as my features.
+790.24 --> 794.76:  Now whenever I am using a numerical features like the length of the word before dot I need
+794.76 --> 801.76:  to pick some sort of threshold that is whether the length of the word is between 2 to 3 or
+802.28 --> 808.36:  say more than 3 between 5 to 7 like that. So, my tree can be if the length of the word
+808.38 --> 815.38:  is between 5 to 7 I go to one class otherwise I go to another class.
+816.22 --> 823.22:  So, now here is one problem suppose I keep on increasing my features this can be both
+823.22 --> 828.42:  numerical or non numerical features it might be difficult to set up my if then else rules
+828.42 --> 835.4200000000001:  by hand. So, in that scenario I can try to use some sort of machine learning technique
+835.88 --> 842.0799999999999:  to learn this decision tree in the literature there are lot of such algorithms that are
+842.0799999999999 --> 847.0799999999999:  available that given data and a set of features will consider decision tree for you.
+847.0799999999999 --> 852.1999999999999:  So, I will just give you so the names of some of the algorithms and the basic idea on this
+852.1999999999999 --> 857.52:  they work is that. So, at every point you have to choose a particular split. So, you
+857.52 --> 863.12:  have to choose a feature value that splits my data into certain parts and I have certain
+863.12 --> 867.3:  criteria to find out what is the best split. So, one particular criteria is what is the
+867.3 --> 873.26:  information gain by this. So, these algorithms that we have mentioned here like ID 3 C 4
+873.26 --> 880.26:  1 5 and cart they all use one of these criteria. In general once you have identified what are
+884.0600000000001 --> 888.66:  your interesting features for this task you are not limited to only one classifier like
+888.66 --> 895.66:  decision tree you can also try out some other classifiers like support vector machines logistic
+897.0 --> 902.5:  regression and neural networks all these are quite popular classifiers for various NLP
+902.5 --> 908.24:  applications. So, we will talk about some of these as we will go to some advanced topics
+908.24 --> 910.04:  in this course.
+910.04 --> 916.3399999999999:  Now, coming back to our problem of tokenization we said that tokenization is a process of
+916.38 --> 920.34:  segmenting a string of characters into words finding out what are the different words in
+920.34 --> 925.5:  this string. Now, remember we talked about token and type distinction. So, suppose I
+925.5 --> 931.94:  give you a simple sentence here I have a can opener, but I cannot open these cans how many
+931.94 --> 938.94:  tokens are there if you count there are 11 different words 11 different occurrences of
+939.94 --> 946.94:  words. So, you have 11 word tokens, but how many unique words are there. So, you will
+947.7 --> 952.46:  find there are only 10 unique words which word repeats here. So, the word I repeats
+952.46 --> 957.7800000000001:  twice. So, there are 10 types and 11 tokens. So, my tokenization is to find out each of
+957.7800000000001 --> 964.7800000000001:  the 11 word tokens from this sentence. In practice at least for English you can use
+965.78 --> 972.78:  certain tool kits that are available like NLTK in python core NLP in java and you can
+973.22 --> 977.78:  also use some unix commands. So, in this course we will mainly be using NLTK toolkit for doing
+977.78 --> 983.9:  all these pre-processing task and some other tasks as well, but in general you can use
+983.9 --> 988.9:  any of these three possibilities.
+989.9 --> 996.9:  So, for English most of the problems that we will see are taken care of by the tokenizers
+1000.62 --> 1005.9399999999999:  that we have discussed previously, but still it is good to know what are the challenges
+1005.9399999999999 --> 1012.9399999999999:  that are involved when I try to design a tokenization algorithm. So, for example here you will see
+1013.1 --> 1018.94:  that if I encounter a word like fill-lens in my data. So, one question that I have is
+1018.94 --> 1024.6200000000001:  whether I treat it as simple fill-lens as it is fill-lens or I converted to fill-lens
+1024.6200000000001 --> 1030.7:  by removing the apostrophe. So, this question you might also try to defer to the next processing
+1030.7 --> 1037.7:  step that we will see, but sometimes you might want to tackle this in the same step. Similarly,
+1037.78 --> 1043.66:  if you see what are do I treat it as a single token or two tokens what are this problem
+1043.66 --> 1048.5:  you might have to solve in the same step whether I treat it as a single token or multiple tokens
+1048.5 --> 1055.5:  same with I am should not and so on. Similarly, whenever you have named entities like San
+1055.5 --> 1061.6200000000001:  Francisco should I treat it as a single token or two separate tokens. Now, remember when
+1061.6200000000001 --> 1066.5800000000002:  we were talking about some of the cases Y and LBH hard. So, you might have to find out
+1066.62 --> 1071.3799999999999:  this particular sequence of tokens is a single entity and treated as a single entity not
+1071.3799999999999 --> 1077.3799999999999:  as multiple different tokens. So, this problem is related. Similarly, if you find m dot p
+1077.3799999999999 --> 1084.3799999999999:  dot h do you call it a single token or multiple tokens. So, now, there are no fixed answers
+1084.3799999999999 --> 1087.34:  to these and some of these might depend on what is the application for which you are
+1087.34 --> 1093.1399999999999:  doing this pre-processing, but one thing you can always keep in mind suppose you are doing
+1093.14 --> 1098.5400000000002:  it for the application of information trivial the same sort of steps that you apply for
+1098.5400000000002 --> 1103.3000000000002:  your documents should be applied to your query as well otherwise you will not be able to
+1103.3000000000002 --> 1108.22:  match them perfectly. So, suppose if I am using it for information
+1108.22 --> 1115.22:  trivial. So, I should use the same convention for both my documents as well as the queries.
+1115.22 --> 1122.22:  So, then another problem can be how do I handle hyphens in my data. So, this looks again a
+1125.42 --> 1129.94:  simple problem, but we will see it is not that simple. So, let us see some kind of examples
+1129.94 --> 1134.22:  what are the various sorts of hyphens that can be there in my copies.
+1134.22 --> 1139.9:  So, here I have a sentence from a research paper abstract and the sentence says this
+1139.9 --> 1146.22:  paper describes mimic an adaptive mixed initiative a spoken dialogue system that provides movie
+1146.22 --> 1151.7:  show time information. So, in this sentence itself you see two different hyphens one is
+1151.7 --> 1158.7:  with initiative another is show hyphen time. So, now, can you see that these two are different
+1159.38 --> 1166.38:  hyphens the first hyphen is not in general that I will use in my text second hyphen I
+1166.94 --> 1172.3000000000002:  can use in my text I can write show time with a hyphen, but how did this hyphen initiative
+1172.3000000000002 --> 1179.0400000000002:  came into the copies. So, we have given this a title end of line hyphen. So, what happens
+1179.0400000000002 --> 1183.3400000000001:  in research papers for example, whenever you write a sentence you might have to do some
+1183.3400000000001 --> 1190.3400000000001:  sort of justification and that is where you end the line even if it is not the end of
+1190.5400000000002 --> 1195.46:  the word. So, you will end up with a hyphen. So, now, when you are trying to pre process
+1195.6200000000001 --> 1199.7:  and when you are retrieving such kind of hyphens you might have to join these together and
+1199.7 --> 1206.42:  you say you have to say that this is a single word initiative and not initiate hyphen tape,
+1206.42 --> 1210.7:  but again this is this is not trivial because for show time you will not do the same show
+1210.7 --> 1216.3400000000001:  time you might want to keep it as it is. Then there are some other kind of hyphens like
+1216.3400000000001 --> 1222.3400000000001:  lexical hyphens. So, you might have these hyphens with various prefixes like co pre
+1222.6599999999999 --> 1229.6599999999999:  meta multi etcetera. Sometimes they are sententially determined hyphens also that is you put hyphens.
+1230.5 --> 1236.3:  So, that it becomes easier to interpret the sentence like here case paged hand delivered
+1236.3 --> 1243.3:  etcetera are optional. Similarly, if you see in the next sentence 3 to 5 year direct marketing
+1244.06 --> 1248.6999999999998:  plan 3 to 5 year can be written perfectly without keeping the hyphens, but here you
+1248.7 --> 1254.42:  are putting it. So, that it becomes easier to interpret that particular occurs. So, again
+1254.42 --> 1259.42:  when you are doing tokenization your problem that how do I handle all these hyphens.
+1259.42 --> 1266.06:  Further there are various issues that might that you might face for certain languages,
+1266.06 --> 1271.54:  but not others. So, for example, is like in French if you have a token like l'ensemble.
+1271.54 --> 1278.1000000000001:  So, you might want to match it with ensemble. So, that might be a similar problem that you
+1278.1 --> 1285.1:  are facing in English, but let us take something in German. So, I have this big sentence here,
+1299.54 --> 1303.82:  but the problem is that this is not a single word. This is a compound composed of four
+1303.9399999999998 --> 1309.02:  different words and the corresponding English meaning is this one. So, you have four words
+1309.02 --> 1314.6599999999999:  in English. So, when you are putting in French they make a compound. So, now what is the
+1314.6599999999999 --> 1319.3:  problem that you will face when you are processing the German text and you are trying to tokenize
+1319.3 --> 1326.06:  it. So, you might want to find out what are the individual words in this particular compound.
+1326.06 --> 1331.1399999999999:  So, you need some sort of compound for German. So, this problem is there for German not so
+1331.14 --> 1338.14:  much for English. So, now what happens if I am taking a language like Chinese or Japanese.
+1351.7 --> 1356.8600000000001:  So, here is a sentence in Chinese. So, what do you see in Chinese words are written without
+1356.86 --> 1362.6999999999998:  any spaces in between. So, now when you are doing the preprocessing your task is to find
+1362.6999999999998 --> 1368.6999999999998:  out what are the individual word tokens in this Chinese sentence. So, this problem is
+1368.6999999999998 --> 1375.4199999999998:  also difficult because in general for a given utterance of a sequence of characters they
+1375.4199999999998 --> 1380.34:  might be more than one possible ways of breaking into sequence of words and both might be perfectly
+1380.34 --> 1386.54:  valid possibilities. So, in Chinese we do not have any space between words and I have
+1386.54 --> 1392.1:  to find out what are the places where I have to break these words and this problem is called
+1392.1 --> 1399.82:  tokenization word tokenization. Same problem happens with Japanese and you
+1399.82 --> 1403.86:  have further complications because they are using four different scripts like Katakana,
+1403.86 --> 1411.34:  Hiragana, Kanji and Romanji. So, this problem becomes a bit more severe. Now, the same problem
+1411.34 --> 1419.3:  is there even for Sanskrit. So, if some of you have taken a Sanskrit course in your
+1419.3 --> 1427.9399999999998:  class 8th or 10th. So, you might be familiar with the rules of Sanskrit language. So, let
+1427.9399999999998 --> 1433.3799999999999:  us say this is a simple single sentence in Sanskrit, but this is a huge this looks like
+1433.3799999999999 --> 1438.5:  a single word, but it is not a single word. It is composed of multiple words in Sanskrit
+1438.66 --> 1444.06:  and they are combined with a Sunday relation. So, this is stands for proverb nice proverb
+1444.06 --> 1448.66:  in Sanskrit that translates in English as one should tell the truth, one should say
+1448.66 --> 1453.86:  kind words, one should neither tell harsh truths nor flattering lies. This is the rule
+1453.86 --> 1458.92:  for all times. This is a proverb and this is a single sentence that talks about this
+1458.92 --> 1463.18:  proverb, but where all the words are combined with Sunday relation. So, if you try to undo
+1463.8600000000001 --> 1468.54:  the Sunday, this is what you will find at the segmented text. So, there are multiple
+1468.54 --> 1475.54:  words in this sentence. They are combined to make a single it looks like a single word.
+1475.54 --> 1483.7:  Now, so this problem is so in Chinese, Japanese and Sanskrit, but in Sanskrit the problem
+1483.7 --> 1492.0600000000002:  is slightly more complicated and why is that? So, in Japanese and in Chinese when you try
+1492.06 --> 1497.8999999999999:  to combine various words together, you simply concatenate them. You put them one after another
+1497.8999999999999 --> 1503.6599999999999:  without making any changes at the boundary. It does not happen in Sanskrit. When you combine
+1503.6599999999999 --> 1507.34:  two words, you also make certain changes at the boundary and this is called the Sunday
+1507.34 --> 1508.34:  operation.
+1508.34 --> 1521.34:  So, in this particular case, see here I have the word bryat and the word na, but when I
+1522.06 --> 1529.46:  am combining, I am writing it bryana. So, you see here the letter T gets changed to
+1529.46 --> 1540.06:  n. So, that means when I am trying to analyze the sentence, so this particular sentence
+1540.06 --> 1545.98:  in Sanskrit, I need to find out not only what are the breaks, but what is the corresponding
+1546.98 --> 1553.9:  which this sentence is derived. So, from here I have to find out the actual words are bryat
+1553.9 --> 1560.46:  plus na that gives me this bryana and this is very common in Sanskrit that you are always
+1560.46 --> 1564.66:  combining words by doing a Sunday operation. So, this further complicates my problem of
+1564.66 --> 1569.66:  word tokenization or segmentation.
+1569.66 --> 1576.66:  So, this is just a list from Wikipedia. What are the longest words in various languages?
+1577.66 --> 1581.8600000000001:  Not the sentences, but the words. You see in Sanskrit, the longest word is composed
+1581.8600000000001 --> 1588.0600000000002:  of 431 characters. It is a compound and then you have Greek and Afrikaans and other languages.
+1588.0600000000002 --> 1595.0600000000002:  In English, you see the longest word is of 45 characters. This is non-scientific. So,
+1596.02 --> 1601.78:  what is the particular word in Sanskrit that is composed of 431 letters? So, this was from
+1601.78 --> 1608.78:  the Vardambika Parinayachampu by Tirumalamba. This is a single compound from his book.
+1609.78 --> 1616.78:  So, now when I talk about this problem of tokenization in Sanskrit or in English, this
+1618.86 --> 1623.7:  problem is also called word segmentation. I have a sequence of characters. I need to
+1624.14 --> 1628.78:  find out individual words. Now, what is the simplest algorithm that you can think of?
+1628.78 --> 1633.5:  Let us say that is a case of Chinese. So, the simplest algorithm that works is a greedy
+1633.5 --> 1639.06:  algorithm that is called maximum matching algorithm. So, whenever you are given a string,
+1639.06 --> 1643.3400000000001:  you start your pointer at the beginning of the string. Now, suppose that you have the
+1643.3400000000001 --> 1649.78:  dictionary and the words that you are currently seeing all should be in the dictionary. So,
+1649.82 --> 1653.66:  you will find out what is the maximum match as per my dictionary in the string. You break
+1653.66 --> 1660.66:  there and put the pointer at the next character and again do the same thing. So, this greedily
+1660.66 --> 1666.98:  chooses what are the actual words by taking the maximum matches and this works nicely
+1666.98 --> 1673.98:  for most of the cases. Now, this cellular iteration, now can you
+1674.98 --> 1679.98:  think of some cases where the segmentation will also be required for English text? In
+1679.98 --> 1685.54:  English, in general, we do not combine words to make a single word. We do not do that,
+1685.54 --> 1691.74:  but what is the scenario where we are doing that right now? So, do hashtags come into
+1691.74 --> 1697.5:  mind? So, for example, suppose I have hashtags like thank you Sachin and music Monday. So,
+1697.5 --> 1702.22:  here different words are combined together without putting a boundary in between. So,
+1702.22 --> 1705.46:  if you are given a hashtag and you have to analyze that, you have to actually segment
+1705.46 --> 1712.46:  it into various words. Now, when I talk about Sanskrit, so this we have a segment available
+1717.94 --> 1722.98:  at the site Sanskrit dot India dot FR. So, we will just briefly see what is the design
+1722.98 --> 1727.7:  principle of building a segment in Sanskrit. So, first we have a generative model that
+1727.7 --> 1733.82:  says how do I generate a sentence in Sanskrit? I have a finite alphabet sigma that means
+1733.82 --> 1739.18:  a set of various characters in Sanskrit. Now, from this finite alphabet, I can generate
+1739.18 --> 1746.18:  a lot of words that are composed of various number of phonemes or letters from this alphabet.
+1746.18 --> 1751.02:  Now, when I have a set of words, I can now combine them together with an operation of
+1751.02 --> 1756.66:  something. That is what I mean by sigma star here. So, w star here. So, I have a set of
+1756.8200000000002 --> 1761.8600000000001:  words w and I do a clean and closure. That means I can combine any number of words together,
+1761.8600000000001 --> 1765.5:  but whenever I am combining words, I am doing them by a sundry operation because there is
+1765.5 --> 1772.5:  a relation between the words. So, I have my set of inflected words also called Padaj in
+1772.78 --> 1778.14:  Sanskrit and I have the relation of sundry between them and that is how I generate sentences.
+1778.14 --> 1784.18:  But my problem is how do I analyze them? So, that is the inverse problem. That is whenever
+1784.18 --> 1789.22:  I am given a sentence w, I have to analyze it by inverting the relations of sundry so
+1789.22 --> 1794.14:  that I can produce a finite set of word forms w 1 to w n. And I am saying together with
+1794.14 --> 1800.14:  the proofs that is a formal way of saying that, but what I mean is that w 1 to w n when
+1800.14 --> 1805.14:  I they combine by sundry operation, they give me the actual sentence, the initial sentence.
+1805.14 --> 1812.14:  So, that is how the segmentar is built. Now, this is a snapshot from the segmentar. So,
+1813.14 --> 1818.5:  I gave the same sentence there and it gave me all the possible ways of analyzing the
+1818.5 --> 1824.46:  sentence and it says that there are 120 different solutions. So, here whenever I have Brianna,
+1824.46 --> 1831.46:  so you see there are two possibilities Briat and Briam. Like that it gives me all the possible
+1832.6200000000001 --> 1836.5400000000002:  ways in which the sentence can be broken into individual word tokens.
+1836.5400000000002 --> 1842.1000000000001:  Now, this is another problem that I will have to find out what is the most likely word token
+1842.6599999999999 --> 1847.8999999999999:  sequence among all these 120 possibilities, but we can use many different models that
+1847.8999999999999 --> 1854.8999999999999:  we will not talk about in this lecture, probably in some other lectures. So, coming back to
+1856.3 --> 1863.3:  normalization, so we talked about this problem that the same word might be written in multiple
+1863.6999999999998 --> 1870.6999999999998:  different ways like u dot s dot a versus u s a. Now, I should be able to match them together,
+1870.82 --> 1876.22:  especially if you are doing information retrieval, you are giving a query and you are retrieving
+1876.22 --> 1880.7:  from some document. Suppose your query contains u dot s dot a and the document contains u
+1880.7 --> 1885.42:  s a, if you are only doing the surface level match, you will not be able to map them to
+1885.42 --> 1891.6200000000001:  each other. So, you will have to consider this problem in advance and do the pre-processing
+1891.6200000000001 --> 1898.6200000000001:  accordingly of either your documents or the query, but using the same sentence.
+1899.2199999999998 --> 1906.2199999999998:  So, what we are doing by this, we are defining some sort of equivalence classes, we are saying
+1906.6599999999999 --> 1913.6599999999999:  u s a and u dot s dot a should go to one class and they are the same type. We also do some
+1914.6999999999998 --> 1921.6999999999998:  sort of case folding that is we can reduce all letters to lower case. So, whenever I
+1922.6200000000001 --> 1929.6200000000001:  have the word like w o r d, I will always write small w o r d, so that whenever even
+1929.78 --> 1935.22:  if it is starting the sentence and it occurs in capitals because of that in general, I
+1935.22 --> 1941.06:  know that this is a word w o r d, but this is not a generic rule, sometimes depending
+1941.06 --> 1946.26:  on application you might have certain exceptions. For example, you might have to treat the name
+1946.26 --> 1950.04:  entity separately, so if you have a entity general motors, you might want to keep it
+1950.04 --> 1957.04:  as it is without case folding. Similarly, you might want to keep u s for United States
+1957.56 --> 1962.2:  in upper case and not do the case folding and this is important for the application
+1962.2 --> 1968.04:  of machine translation also because if you do a case folding here, you will know u s
+1968.04 --> 1975.04:  in lower case that means something else for such u s that is in United States.
+1975.04 --> 1982.04:  We also have the problem of lamination that is you have individual words like m r h and
+1987.36 --> 1991.08:  you want to convert them to their lemma that means what is the base form from which they
+1991.08 --> 1997.3999999999999:  are derived. Similarly, car, cars, cars, cars, so all these are derived from car. So, again
+1997.3999999999999 --> 2000.84:  this is some sort of normalization, you are saying all these are some sort of equivalence
+2000.84 --> 2006.32:  class because they come from the same word form. So, in the problem of lamination is
+2006.32 --> 2011.8799999999999:  that you have to find out the actual dictionary head word from which they are derived and
+2011.8799999999999 --> 2018.1999999999998:  for that we use morphology. So, what is morphology? I am trying to find
+2018.1999999999998 --> 2024.9599999999998:  out the structure of a word by seeing what is the particular stem, the head word and
+2024.9599999999998 --> 2029.28:  what is the affix that I apply to it. So, these individual units are called various
+2029.28 --> 2036.28:  morphemes. So, you have stems that are the dictionary head words and the affixes that
+2037.0 --> 2042.68:  are what are the different units like s for plural etcetera you applying to them to make
+2042.68 --> 2047.6399999999999:  the individual word. Some examples are like for prefix you have
+2047.6399999999999 --> 2054.64:  ananti etcetera for English and atipra etcetera for Hindi or Sanskrit. So, affix like itiation
+2055.64 --> 2062.64:  etcetera and taka k etcetera for Hindi and in general you can also have some infix like
+2065.56 --> 2070.56:  you have a word like with and you can infix and in between this is in Sanskrit. So, we
+2070.56 --> 2074.56:  will discuss in detail about it in morphology later.
+2074.56 --> 2081.56:  So, there is another concept you have lamination where you are finding the actual dictionary
+2081.56 --> 2086.56:  head word. So, it is also concept called stemming where you do not try to find the actual dictionary
+2086.56 --> 2093.56:  head word, but you just try to remove certain suffixes and you whatever you obtain is called
+2093.84 --> 2100.84:  stem. So, this is a crude chopping of various suffixes in that word. So, this is again language
+2102.44 --> 2108.2799999999997:  dependent. So, what we are doing here words like automate, automatic, automation all will
+2108.28 --> 2113.4:  be reduced to single lemma automate here. So, this is stemming. So, you know the actual
+2113.4 --> 2119.84:  lemma is automate with an e, but here. So, I am just chopping of the affixes at the end.
+2119.84 --> 2126.84:  So, I am removing here this ic, ion all and putting it to automate. So, this is one example.
+2126.84 --> 2133.84:  So, if you try to do a stemming here. So, you will find from example e is removed from
+2138.36 --> 2144.36:  compressed e is removed and so on. So, what is the algorithm that is used for this stemming?
+2144.36 --> 2151.36:  So, we have the Porter's algorithm that is very famous and this is again set of if
+2152.36 --> 2158.6400000000003:  then else rules. So, what are some examples here? So, what is the first step? I take a
+2158.6400000000003 --> 2165.6400000000003:  word if it ends with s s e s, I remove e s from there and I end with s s. So, example
+2165.7200000000003 --> 2172.7200000000003:  is carousel goes to carousel. If not, then I see whether the word ends with i s, I put
+2173.72 --> 2182.72:  it to i like ponies goes to pony. If not, I see if the word ends with s s, I keep bid
+2182.72 --> 2189.72:  as s s. If not, I see if the word ends with s, I remove that s. So, cat goes to cat, but
+2189.7999999999997 --> 2195.16:  carousel does not go to carousel with only one s because this step comes before. If there
+2195.16 --> 2201.16:  is a double s ending the word, I retain it. Otherwise, if there is a single s, I remove
+2201.8399999999997 --> 2208.8399999999997:  like that there are some other steps. So, if there is a vowel in my word and the word
+2208.8399999999997 --> 2215.16:  ends with i n g, I remove i n g. So, walking goes to walk, but what about king? You see
+2215.16 --> 2221.6:  in k there is no vowel. So, king will be retained as it is. Same there is a vowel and there
+2221.6 --> 2228.6:  is an e d, I remove this e d and I have this word played to play. So, you can see that
+2229.4 --> 2234.16:  what is the use of this heuristic of having this vowel. If you did not have this vowel,
+2234.16 --> 2239.16:  you would have converted king to k. And like that there are some other rules like if the
+2239.16 --> 2246.16:  word ends with a s n l, then I put it put a t e. So, relational to relate and if the
+2246.88 --> 2253.88:  word ends with i z e r, I remove that r, digitize it digitize a t o r to a t e and if the word
+2254.2400000000002 --> 2261.2400000000002:  ends with a l, I remove that a l. If the word ends with able, I remove that able. If the
+2261.6400000000003 --> 2267.48:  words end with a t e, I remove that a t e. So, like that these are some steps that I
+2267.48 --> 2274.48:  take from my corpus for each word I converted to its step. It does not give me the correct
+2274.48 --> 2280.48:  dictionary head word, but still this is a good practicing principle for information
+2280.48 --> 2287.48:  retrieval. If you want to match the query with the documents. So, this is for this week.
+2287.88 --> 2294.88:  So, next week we will start with another preprocessing task that is spelling correction.
